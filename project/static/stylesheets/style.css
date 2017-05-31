@@ -1,0 +1,30 @@
+.nav_img{
+  width:20px;
+  height: 20px;
+}
+
+#profile-avatar {
+  border: 3px solid #eee;
+  border-radius: 12px;
+  margin-bottom: 10px
+}
+
+.grey{
+  box-shadow: 0 0 0 4px #ccc;
+}
+
+.purple{
+  box-shadow: 0 0 0 4px #d88dd8;
+}
+
+.red{
+  box-shadow: 0 0 0 4px #e66666;
+}
+
+.orange{
+  box-shadow: 0 0 0 4px #ffc574;
+}
+
+.green{
+  box-shadow: 0 0 0 4px #74ce5f;
+}

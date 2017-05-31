@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block content %}
+  {% if status == 1 %}
+    <img src="{{ user.img_url }}" class="green" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Online</p>
+  {% elif status == 2 %}
+    <img src="{{ user.img_url }}" class="red" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Busy</p>
+  {% elif status == 3 %}
+    <img src="{{ user.img_url }}" class="orange" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Away</p>
+  {% elif status == 4 %}
+    <img src="{{ user.img_url }}" class="orange" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Snooze</p>
+  {% elif status == 5 %}
+    <img src="{{ user.img_url }}" class="purple" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Looking to trade</p>
+  {% elif status == 6 %}
+    <img src="{{ user.img_url }}" class="blue" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Looking to play</p>
+  {% else %}
+    <img src="{{ user.img_url }}" class="grey" alt="Image for {{ user.username }}" id="profile-avatar">
+    <p>Status: Offline</p>
+    <p>Last online: {{diff}} days ({{last_online}})<p>
+  {% endif %}
+{% endblock %}

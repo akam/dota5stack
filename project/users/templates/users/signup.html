@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-4">
+    <h2 class="join-message">Sign up!</h2>
+    <form action="{{ url_for('users.signup') }}" method="POST">
+      {{ form.csrf_token }}
+      {% if form.username.errors %}
+        {% for error in form.username.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      <label for="username">Username:</label>
+      {{ form.username(placeholder="Username", class="form-control") }}
+      {% if form.email.errors %}
+        {% for error in form.email.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      <label for="email">E-mail:</label>
+      {{ form.email(placeholder="E-mail", class="form-control") }}
+      {% if form.steamID.errors %}
+        {% for error in form.steamID.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      <label for="steamID">Steam ID:</label>
+      {{ form.steamID(placeholder="SteamID", class="form-control") }}
+
+      {% if form.mmr.errors %}
+        {% for error in form.mmr.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      <label for="mmr">MMR:</label>
+        <select name="mmr" class="form-control" id='mmr'>
+          <option>1000</option>
+          <option>2000</option>
+          <option>3000</option>
+          <option>4000</option>
+          <option>5000+</option>
+        </select>
+      {% if form.password.errors %}
+        {% for error in form.password.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      <label for="password">Password:</label>
+      {{ form.password(placeholder="Password", class="form-control") }}
+      <button type="submit" class="btn btn-default">Sign me up!</button>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
