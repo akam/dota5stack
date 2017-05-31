@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from project.users.models import User
-from project.users.forms import UserForm, LoginForm, EditForm
+from project.users.forms import UserForm, LoginForm, EditForm, DeleteForm
 from project import db, bcrypt
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, logout_user, current_user, login_required
@@ -89,12 +89,44 @@ def logout():
 @login_required
 @ensure_correct_user
 def edit(id):
-  return render_template('users/edit.html', form=EditForm(), user=User.query.get(id))
+    return render_template('users/edit.html', form=EditForm(), user=User.query.get(id))
 
-@users_blueprint.route('/<int:id>')
+@users_blueprint.route('/<int:id>/delete', methods=["GET", "DELETE"])
+@login_required
+@ensure_correct_user
+def delete(id):
+    found_user = User.query.get(id)
+    form = DeleteForm(request.form)
+    if request.method == b'DELETE':
+        if form.validate():
+            if bcrypt.check_password_hash(found_user.password, form.password.data):
+                flash({ 'text': "You have successfully deleted {}".format(found_user.username), 'status': 'success' })
+                flash({ 'text': "Thank you for using our app!", 'status': 'success' })
+                db.session.delete(found_user)
+                db.session.commit()
+                logout_user()
+                return redirect(url_for('root'))
+        flash({ 'text': "Wrong password, please try again.", 'status': 'danger'})    
+    return render_template('users/delete.html', user=User.query.get(id), form=form)
+
+@users_blueprint.route('/<int:id>', methods=['GET', 'PATCH'])
 @login_required
 def show(id):
     found_user = User.query.get(id)
+    form = EditForm(request.form)
+    if request.method == b'PATCH':
+        if form.validate():
+            if bcrypt.check_password_hash(found_user.password, form.password.data):
+                found_user.username = form.username.data;
+                found_user.email = form.email.data;
+                found_user.steamID = form.steamID.data;
+                found_user.mmr = request.form['mmr']
+                found_user.discord = form.discord.data or None;
+                db.session.add(found_user);
+                db.session.commit();
+                return redirect(url_for('users.show', id=id))
+            flash({ 'text': "Wrong password, please try again.", 'status': 'danger'})
+        return render_template('users/edit.html', form=form, user=found_user)
     payload = {'key': os.environ.get('API_KEY'), 'steamids': found_user.steamID}
     r = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/', params=payload)
     dataJSON = r.json()

@@ -30,7 +30,50 @@
           </span>
         {% endfor %}
       {% endif %}
+      {{ form.steamID(placeholder="What's your steamID?", value=user.steamID, class="form-control") }}
+      {% if form.username.errors %}
+        {% for error in form.username.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
 
+      <label for="mmr">MMR:</label>
+        <select name="mmr" class="form-control" id='mmr'>
+          {% if user.mmr == '1000' %}
+            <option selected="selected">1000</option>
+            <option>2000</option>
+            <option>3000</option>
+            <option>4000</option>
+            <option>5000+</option>
+          {% elif user.mmr == '2000' %}
+            <option>1000</option>
+            <option selected="selected">2000</option>
+            <option>3000</option>
+            <option>4000</option>
+            <option>5000+</option>
+          {% elif user.mmr == '3000' %}
+            <option>1000</option>
+            <option>2000</option>
+            <option selected="selected">3000</option>
+            <option>4000</option>
+            <option>5000+</option>
+          {% elif user.mmr == '4000' %}
+            <option>1000</option>
+            <option>2000</option>
+            <option>3000</option>
+            <option selected="selected">4000</option>
+            <option>5000+</option>
+          {% else %}
+            <option>1000</option>
+            <option>2000</option>
+            <option>3000</option>
+            <option>4000</option>
+            <option selected="selected">5000+</option>
+          {% endif %}
+          
+        </select>
 
       {{ form.discord(placeholder="Example#1234", value='', class="form-control") }}
       {% if form.discord.errors %}
@@ -43,8 +86,9 @@
 
       <p>To confirm changes, enter your password:</p>
       {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
-      <button type="submit" class="btn btn-success">Edit information!</button>
+      <button type="submit" class="btn btn-success">Edit profile</button>
       <a href="{{ url_for('users.show', id=user.id) }}" class="btn btn-default">Cancel</a>
+      <a href="{{ url_for('users.delete', id=user.id) }}" class="btn btn-danger pull-right">Delete profile</a>
     </form>
   </div>
 </div>

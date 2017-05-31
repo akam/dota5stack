@@ -20,3 +20,6 @@ class EditForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
+
+class DeleteForm(FlaskForm):
+    password = PasswordField('password', validators=[DataRequired()])
