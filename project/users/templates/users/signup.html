@@ -34,6 +34,26 @@
       {% endif %}
       <label for="steamID">Steam ID:</label>
       {{ form.steamID(placeholder="SteamID", class="form-control") }}
+      <label for="position">Preferred position(s):</label>
+      <div>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox1" name='support2' value="option1"> Support (Position 5)
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox2" name='support1' value="option2"> Support (Position 4)
+        </label>
+        <div>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" name='offlane' value="option3"> Offlane (Position 3)
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox4" name='mid' value="option4"> Mid (Position 2)
+        </label>
+        </div>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox5" name='carry' value="option5"> Carry (Position 1)
+        </label>
+      </div>
 
       {% if form.mmr.errors %}
         {% for error in form.mmr.errors %}
@@ -59,7 +79,9 @@
       {% endif %}
       <label for="password">Password:</label>
       {{ form.password(placeholder="Password", class="form-control") }}
-      <button type="submit" class="btn btn-default">Sign me up!</button>
+      <div class="wrapper">
+        <button type="submit" class="btn btn-default">Sign me up!</button>
+      </div>
     </form>
 
   </div>

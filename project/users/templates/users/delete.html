@@ -7,7 +7,9 @@
       {{ form.csrf_token }}
       <p>To confirm delete, enter your password:</p>
         {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
-      <button type="submit" class="btn btn-danger pull-right">DELETE USER</button>
+    <div class="wrapper">
+      <button type="submit" class="btn btn-danger">DELETE USER</button>
+    </div>
     </form> 
   </div>
 </div>

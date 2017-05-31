@@ -32,3 +32,8 @@
 .hamburger{
   margin: 8px 3px;
 }
+
+.wrapper {
+  margin-top: 10px;
+  text-align: center;
+}

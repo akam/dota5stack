@@ -15,6 +15,8 @@
           </span>
         {% endfor %}
       {% endif %}
+
+      {{ form.email(placeholder="What's your email?", value=user.email, class="form-control") }}
       {% if form.email.errors %}
         {% for error in form.email.errors %}
           <span class="text-danger">
@@ -22,22 +24,63 @@
           </span>
         {% endfor %}
       {% endif %}
-      {{ form.email(placeholder="What's your email?", value=user.email, class="form-control") }}
-      {% if form.username.errors %}
-        {% for error in form.username.errors %}
-          <span class="text-danger">
-            {{ error }}
-          </span>
-        {% endfor %}
-      {% endif %}
+
       {{ form.steamID(placeholder="What's your steamID?", value=user.steamID, class="form-control") }}
-      {% if form.username.errors %}
-        {% for error in form.username.errors %}
+      {% if form.steamID.errors %}
+        {% for error in form.steamID.errors %}
           <span class="text-danger">
             {{ error }}
           </span>
         {% endfor %}
       {% endif %}
+
+      <label for="position">Preferred position(s):</label>
+      <div>
+
+        <label class="checkbox-inline">
+          {% if user.support2 %}
+            <input type="checkbox" id="inlineCheckbox1" name='support2' value="option1" checked> Support (Position 5)
+          {% else %}
+            <input type="checkbox" id="inlineCheckbox1" name='support2' value="option1"> Support (Position 5)
+          {% endif %}
+        </label>
+
+        <label class="checkbox-inline">
+          {% if user.support1 %}
+            <input type="checkbox" id="inlineCheckbox2" name='support1' value="option2" checked> Support (Position 4)
+          {% else %}
+            <input type="checkbox" id="inlineCheckbox2" name='support1' value="option2"> Support (Position 4)
+          {% endif %}
+        </label>
+
+        <div>
+          <label class="checkbox-inline">
+            {% if user.offlane %}
+              <input type="checkbox" id="inlineCheckbox3" name='offlane' value="option3" checked> Offlane (Position 3)
+            {% else %}
+              <input type="checkbox" id="inlineCheckbox3" name='offlane' value="option3"> Offlane (Position 3)
+            {% endif %}
+          </label>
+
+          <label class="checkbox-inline">
+            {% if user.mid %}
+              <input type="checkbox" id="inlineCheckbox4" name='mid' value="option4" checked> Mid (Position 2)
+            {% else %}
+              <input type="checkbox" id="inlineCheckbox4" name='mid' value="option4"> Mid (Position 2)
+            {% endif %}
+          </label>
+        </div>
+
+        <label class="checkbox-inline">
+          {% if user.carry %}
+            <input type="checkbox" id="inlineCheckbox5" name='carry' value="option5" checked> Carry (Position 1)
+          {% else %}
+            <input type="checkbox" id="inlineCheckbox5" name='carry' value="option5"> Carry (Position 1)
+          {% endif %}
+          
+        </label>
+
+      </div>
 
       <label for="mmr">MMR:</label>
         <select name="mmr" class="form-control" id='mmr'>
@@ -85,10 +128,24 @@
       {% endif %}
 
       <p>To confirm changes, enter your password:</p>
+       {% if form.password.errors %}
+        {% for error in form.password.errors %}
+          <span class="text-danger">
+            Please enter your password to submit changes
+          </span>
+        {% endfor %}
+      {% endif %}
       {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
-      <button type="submit" class="btn btn-success">Edit profile</button>
-      <a href="{{ url_for('users.show', id=user.id) }}" class="btn btn-default">Cancel</a>
+      <div class="wrapper">
+        <button type="submit" class="btn btn-success">Edit profile</button>
+        <a href="{{ url_for('users.show', id=user.id) }}" class="btn btn-default">Cancel</a>
+      </div>
+      <div>
+      <br>
+      <br>
+      <br>
       <a href="{{ url_for('users.delete', id=user.id) }}" class="btn btn-danger pull-right">Delete profile</a>
+      </div>
     </form>
   </div>
 </div>

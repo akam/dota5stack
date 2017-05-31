@@ -46,12 +46,21 @@ def signup():
                     flash({'text': "Invalid steamID", 'status': 'danger'})
                     return render_template('users/signup.html', form=form)
                 url = p['response']['players'][0]['avatarfull']
+
+                if not form.carry.data and not form.support2.data and not form.support1.data and not form.offlane.data and not form.mid.data:
+                    flash({'text': "Please choose at least one position", 'status': 'danger'})
+                    return render_template('users/signup.html', form=form)
                 new_user = User(
                     username = form.username.data,
                     email = form.email.data,
                     steamID = form.steamID.data,
                     password = form.password.data,
-                    mmr=form.mmr.data
+                    mmr=form.mmr.data,
+                    support2 = form.support2.data,
+                    support1 = form.support1.data,
+                    offlane = form.offlane.data,
+                    mid = form.mid.data,
+                    carry = form.carry.data
                 )
                 new_user.img_url = url
                 db.session.add(new_user)
@@ -75,7 +84,8 @@ def login():
                 if is_authenticated:
                     login_user(found_user)
                     flash({'text': "Hello, {}!".format(found_user.username), 'status': 'success'})
-                    return redirect(url_for('root'))                 
+                    return redirect(url_for('root'))   
+            flash({'text': "Incorrect username or password", 'status': 'warning'})                
     return render_template('users/login.html', form=form)
 
 @users_blueprint.route('/logout')
@@ -100,7 +110,7 @@ def delete(id):
     if request.method == b'DELETE':
         if form.validate():
             if bcrypt.check_password_hash(found_user.password, form.password.data):
-                flash({ 'text': "You have successfully deleted {}".format(found_user.username), 'status': 'success' })
+                flash({ 'text': "You have successfully deleted '{}'".format(found_user.username), 'status': 'danger' })
                 flash({ 'text': "Thank you for using our app!", 'status': 'success' })
                 db.session.delete(found_user)
                 db.session.commit()
@@ -116,14 +126,23 @@ def show(id):
     form = EditForm(request.form)
     if request.method == b'PATCH':
         if form.validate():
+            if not form.carry.data and not form.support2.data and not form.support1.data and not form.offlane.data and not form.mid.data:
+                flash({'text': "Please choose at least one position", 'status': 'danger'})
+                return render_template('users/edit.html', form=form, user=found_user)
             if bcrypt.check_password_hash(found_user.password, form.password.data):
                 found_user.username = form.username.data;
                 found_user.email = form.email.data;
                 found_user.steamID = form.steamID.data;
-                found_user.mmr = request.form['mmr']
+                found_user.support2 = form.support2.data;
+                found_user.support1 = form.support1.data;
+                found_user.carry = form.carry.data;
+                found_user.mid = form.mid.data;
+                found_user.offlane = form.offlane.data;
+                found_user.mmr = form.mmr.data;
                 found_user.discord = form.discord.data or None;
                 db.session.add(found_user);
                 db.session.commit();
+                flash({ 'text': "Successfully updated profile!", 'status': 'success'})
                 return redirect(url_for('users.show', id=id))
             flash({ 'text': "Wrong password, please try again.", 'status': 'danger'})
         return render_template('users/edit.html', form=form, user=found_user)
