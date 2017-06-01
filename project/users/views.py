@@ -28,6 +28,7 @@ def ensure_correct_user(fn):
 @users_blueprint.route('/')
 def index():
     users = User.query.all()
+    users.sort(key=lambda user: user.steamID)
     steamIDarray = [user.steamID for user in users]
     steamIDarray.sort()
     steamIDs = ",".join([str(ids) for ids in steamIDarray])

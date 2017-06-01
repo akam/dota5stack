@@ -3,16 +3,29 @@ from flask_login import UserMixin
 
 
 LikersLikee = db.Table('likes',
-                        db.Column('id',
-                                    db.Integer,
-                                    primary_key=True),
-                        db.Column('likee_id',
-                                    db.Integer,
-                                    db.ForeignKey('users.id', ondelete="cascade")),
-                        db.Column('liker_id',
-                                    db.Integer,
-                                    db.ForeignKey('users.id', ondelete="cascade")),
-                        db.CheckConstraint('liker_id != likee_id', name="no_self_like"))
+                    db.Column('id',
+                                db.Integer,
+                                primary_key=True),
+                    db.Column('likee_id',
+                                db.Integer,
+                                db.ForeignKey('users.id', ondelete="cascade")),
+                    db.Column('liker_id',
+                                db.Integer,
+                                db.ForeignKey('users.id', ondelete="cascade")),
+                    db.CheckConstraint('liker_id != likee_id', name="no_self_like"))
+
+TeamUsers = db.Table('teams_users',
+                    db.Column('id',
+                                db.Integer,
+                                primary_key=True),
+                    db.Column('team_id',
+                                db.Integer,
+                                db.ForeignKey('teams.id', ondelete='cascade')),
+                    db.Column('user_id',
+                                db.Integer,
+                                db.ForeignKey('users.id', ondelete='cascade')),
+                    db.Column('status',
+                                db.Integer))
 
 class User(db.Model, UserMixin):
 
@@ -37,6 +50,10 @@ class User(db.Model, UserMixin):
                                 secondaryjoin=(LikersLikee.c.likee_id == id),
                                 backref=db.backref('liking', lazy='dynamic'),
                                 lazy='dynamic')
+    teams = db.relationship("Team",
+                            secondary=TeamUsers,
+                            backref=db.backref('players', lazy='dynamic'),
+                            lazy='dynamic')
 
     def __init__(self, username, email, steamID, password, mmr, support2, support1, offlane, mid, carry):
         self.username = username

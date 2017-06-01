@@ -20,8 +20,11 @@ db = SQLAlchemy(app)
 
 from project.users.views import users_blueprint
 from project.users.models import User
+from project.teams.views import teams_blueprint
+from project.teams.models import Team
 
 app.register_blueprint(users_blueprint, url_prefix='/users')
+app.register_blueprint(teams_blueprint, url_prefix='/teams')
 
 @login_manager.user_loader
 def load_user(id):
