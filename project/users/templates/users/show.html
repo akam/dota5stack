@@ -1,30 +1,104 @@
 {% extends "base.html" %} 
 {% block content %}
+
   <div class="row">
-    <div class="col-xs-4">
+    <div class="pull-right">
+    {% if current_user.is_authenticated and current_user != user %}
+        {% if current_user.is_liking(user) %}
+          <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+            <input type="submit" value="Unlike playing with" class="btn btn-info btn-sm">
+          </form>
+        {% else %}
+          <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+            <input type="submit" value="Like playing with" class="btn btn-primary">
+          </form>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="col-xs-3">
+      <!-- IMAGE, USERNAME, STATUS -->
       {% if status == 1 %}
         <img src="{{ user.img_url }}" class="green" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Online</p>
+
       {% elif status == 2 %}
         <img src="{{ user.img_url }}" class="red" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Busy</p>
       {% elif status == 3 %}
         <img src="{{ user.img_url }}" class="orange" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Away</p>
       {% elif status == 4 %}
         <img src="{{ user.img_url }}" class="orange" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Snooze</p>
       {% elif status == 5 %}
         <img src="{{ user.img_url }}" class="purple" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Looking to trade</p>
       {% elif status == 6 %}
         <img src="{{ user.img_url }}" class="blue" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Looking to play</p>
       {% else %}
         <img src="{{ user.img_url }}" class="grey" alt="Image for {{ user.username }}" id="profile-avatar">
+        <h4 id="sidebar-username">
+          {% if user.username|length <= 15 %}
+            @{{ user.username }}
+            {% else %}
+            @{{ user.username[0:15]}}...
+          {% endif %}
+        </h4>
         <p>Status: Offline</p>
-        <p>Last online: {{diff}} days ({{last_online}})<p>
+        <p>Last online: {{diff}} day(s) [{{last_online}}]<p>
       {% endif %}
+
+
+
+
+
+
+
+
+      
       <p>Preferred Role(s):<p>
       <ul>
         {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}

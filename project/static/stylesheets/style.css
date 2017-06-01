@@ -6,7 +6,8 @@
 #profile-avatar {
   border: 3px solid #eee;
   border-radius: 12px;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  width: 100%;
 }
 
 .grey{
@@ -36,4 +37,39 @@
 .wrapper {
   margin-top: 10px;
   text-align: center;
+}
+
+.card {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #CCC;
+  background: white;
+  margin-top: 20px;
+  box-shadow: 7px 7px 14px -3px #ccc;
+}
+
+.card-image {
+  border: 1px solid lightgrey;
+  border-radius: 7px;
+  width: 60px;
+}
+
+.sidebar {
+  padding-bottom: 10%;
+  padding-top: 10px
+}
+
+.box {
+    display: inline-block;
+    margin: 3px;  
+}
+
+.info{
+  width: 60%;
+  margin-left: 10px
+}
+
+.prof{
+  width: 30%;
+  margin-bottom: -9px;
 }

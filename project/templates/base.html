@@ -22,6 +22,12 @@
         <span>Dota 5 Stack</span>
       </a>
     </div>
+    {% if not current_user.is_anonymous %}
+    <ul class="nav navbar-nav navbar-left">
+      <li><a href="{{ url_for('users.index') }}">All users</a></li>
+      <li><a href="{{ url_for('users.liking', id=current_user.id) }}">Liked playing with</a></li>
+    </ul>
+    {% endif %}
     <ul class="nav navbar-nav navbar-right">
 <!--       <li>
         <form class="navbar-form navbar-right" action={{url_for('users.index')}} method='GET'>

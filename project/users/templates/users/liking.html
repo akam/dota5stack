@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row user-cards">
+    <div class="col-xs-3 sidebar">
+      <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" id="profile-avatar">
+      <h4 id="sidebar-username">
+        {% if user.username|length <= 15 %}
+          @{{ user.username }}
+          {% else %}
+          @{{ user.username[0:15]}}...
+        {% endif %}
+      </h4>
+      {% if user.bio %}
+        <p>About Me: </p>
+        <p>{{user.bio}}</p>
+      {% endif %}
+      <p>E-mail: {{user.email}}</p>
+      
+      {% if user.location %}
+        <p>Location: 
+        {{user.location}}</p>
+      {% endif %}
+      
+    </div>
+    <div class="col-xs-9">
+      <div class="row">
+        {% for likee in user.liking %}
+          <div class="col-xs-4">
+            <div class="card">
+              <div class="box prof pull-left">
+                <a href="{{ url_for('users.show', id=likee.id) }}" class="card-link">
+                  <img src="{{ likee.img_url }}" alt="Image for {{ likee.username }}" class="card-image">
+                  <p>
+                  {% if likee.username|length <= 8 %}
+                    @{{ likee.username }}
+                    {% else %}
+                    @{{ likee.username[0:8]}}...
+                  {% endif %}
+                  </p>
+                </a>
+               </div>   
+              <div class="box info">
+                <p>Karma score: 10</p>
+                <p>MMR: {{likee.mmr}}</p>
+                <p>Pos: 
+                {% if likee.support2 and likee.support1 and likee.offlane and likee.carry and likee.mid %}
+                  Any
+                {% else %}
+                  {% if likee.support2 %}
+                  [5]
+                  {% endif %}
+                  {% if likee.support1 %}
+                  [4]
+                  {% endif %}
+                  {% if likee.offlane %}
+                  [3]
+                  {% endif %}
+                  {% if likee.mid%}
+                  [2]
+                  {% endif %}
+                  {% if likee.carry %}
+                  [1]
+                  {% endif %}
+                {% endif %}
+                </p>
+              </div> 
+            </div>
+            {% if likee == current_user %}
+            {% elif current_user.is_liking(likee) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=likee.id)}}?_method=DELETE">
+                <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+              </form>
+            {% else %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=likee.id)}}">
+                <input type="submit" value="Like" class="btn btn-primary btn-sm">
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

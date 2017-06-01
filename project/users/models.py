@@ -1,6 +1,19 @@
 from project import db, bcrypt
 from flask_login import UserMixin
 
+
+LikersLikee = db.Table('likes',
+                        db.Column('id',
+                                    db.Integer,
+                                    primary_key=True),
+                        db.Column('likee_id',
+                                    db.Integer,
+                                    db.ForeignKey('users.id', ondelete="cascade")),
+                        db.Column('liker_id',
+                                    db.Integer,
+                                    db.ForeignKey('users.id', ondelete="cascade")),
+                        db.CheckConstraint('liker_id != likee_id', name="no_self_like"))
+
 class User(db.Model, UserMixin):
 
     __tablename__ = 'users'
@@ -18,6 +31,12 @@ class User(db.Model, UserMixin):
     offlane = db.Column(db.Boolean)
     mid = db.Column(db.Boolean)
     password = db.Column(db.Text)
+    likers = db.relationship("User",
+                                secondary=LikersLikee,
+                                primaryjoin=(LikersLikee.c.liker_id == id),
+                                secondaryjoin=(LikersLikee.c.likee_id == id),
+                                backref=db.backref('liking', lazy='dynamic'),
+                                lazy='dynamic')
 
     def __init__(self, username, email, steamID, password, mmr, support2, support1, offlane, mid, carry):
         self.username = username
@@ -35,3 +54,8 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "#{}: username: {} - email: {}".format(self.id, self.email, self.username)
 
+    def is_liked_by(self, user):
+        return bool(self.likers.filter_by(id=user.id).first())
+
+    def is_liking(self, user):
+        return bool(self.liking.filter_by(id=user.id).first())

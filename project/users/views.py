@@ -27,7 +27,31 @@ def ensure_correct_user(fn):
 
 @users_blueprint.route('/')
 def index():
-    return render_template('users/index.html')
+    users = User.query.all()
+    steamIDarray = [user.steamID for user in users]
+    steamIDarray.sort()
+    steamIDs = ",".join([str(ids) for ids in steamIDarray])
+    payload = {'key': os.environ.get('API_KEY'), 'steamids': steamIDs}
+    r = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/', params=payload)
+    p = r.json()
+    players = p['response']['players']
+    players.sort(key=lambda player: player['steamid'])
+    l2p = []
+    online = []
+    away = []
+    rest = []
+    for i,v in enumerate(players):
+        if players[i]['personastate'] == 1:
+            online.append(users[i])
+        elif players[i]['personastate'] == 6: 
+            l2p.append(users[i])
+        elif players[i]['personastate'] == 3:
+            away.append(users[i])
+        elif players[i]['personastate'] == 4:
+            away.append(users[i])
+        else:
+            rest.append(users[i])
+    return render_template('users/index.html', users=users, online=online, rest=rest, away=away, l2p=l2p)
 
 @users_blueprint.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -157,6 +181,28 @@ def show(id):
     if request.method == 'GET' or current_user.is_anonymous or current_user.get_id() != str(id):
         return render_template('users/show.html', user=found_user, data=dataJSON, diff=diff.days, last_online=last_online.strftime('%d/%m/%Y'), status=status)
 
+
+@users_blueprint.route('/<int:liker_id>/liker', methods=['POST', 'DELETE'])
+@login_required
+def liker(liker_id):
+  liked = User.query.get(liker_id)
+  if request.method == 'POST':
+    current_user.liking.append(liked)
+  else:
+    current_user.liking.remove(liked)
+  db.session.add(current_user)
+  db.session.commit()
+  return redirect(url_for('users.liking', id=current_user.id))
+
+@users_blueprint.route('/<int:id>/liking', methods=['GET'])
+@login_required
+def liking(id):
+    return render_template('users/liking.html', user=User.query.get(id), current_user=current_user)
+
+@users_blueprint.route('/<int:id>/likers', methods=['GET'])
+@login_required
+def likers(id):
+    return render_template('users/likers.html', user=User.query.get(id))  
 
 
 
