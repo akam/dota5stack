@@ -14,18 +14,20 @@ LikersLikee = db.Table('likes',
                                 db.ForeignKey('users.id', ondelete="cascade")),
                     db.CheckConstraint('liker_id != likee_id', name="no_self_like"))
 
-TeamUsers = db.Table('teams_users',
-                    db.Column('id',
-                                db.Integer,
-                                primary_key=True),
-                    db.Column('team_id',
-                                db.Integer,
-                                db.ForeignKey('teams.id', ondelete='cascade')),
-                    db.Column('user_id',
-                                db.Integer,
-                                db.ForeignKey('users.id', ondelete='cascade')),
-                    db.Column('status',
-                                db.Integer))
+# TeamUsers = db.Table('teams_users',
+#                     db.Column('id',
+#                                 db.Integer,
+#                                 primary_key=True),
+#                     db.Column('team_id',
+#                                 db.Integer,
+#                                 db.ForeignKey('teams.id', ondelete='cascade')),
+#                     db.Column('user_id',
+#                                 db.Integer,
+#                                 db.ForeignKey('users.id', ondelete='cascade')),
+#                     db.Column('status',
+#                                 db.Integer))
+
+
 
 class User(db.Model, UserMixin):
 
@@ -50,10 +52,10 @@ class User(db.Model, UserMixin):
                                 secondaryjoin=(LikersLikee.c.likee_id == id),
                                 backref=db.backref('liking', lazy='dynamic'),
                                 lazy='dynamic')
-    teams = db.relationship("Team",
-                            secondary=TeamUsers,
-                            backref=db.backref('players', lazy='dynamic'),
-                            lazy='dynamic')
+    # teams = db.relationship("Team",
+    #                         secondary=TeamUsers,
+    #                         backref=db.backref('players', lazy='dynamic'),
+    #                         lazy='dynamic')
 
     def __init__(self, username, email, steamID, password, mmr, support2, support1, offlane, mid, carry):
         self.username = username
@@ -76,3 +78,30 @@ class User(db.Model, UserMixin):
 
     def is_liking(self, user):
         return bool(self.liking.filter_by(id=user.id).first())
+
+class TeamUsers(db.Model):
+
+    __tablename__ = 'teams_users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('teams.id', ondelete='cascade'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
+    status = db.Column(db.Integer)
+    users = db.relationship("User",
+                            backref=db.backref('teamz'))
+    teams = db.relationship("Team",
+                            backref=db.backref('userz'))
+
+    def __init__(self, team_id, user_id, status):
+        self.team_id = team_id
+        self.user_id = user_id
+        self.status = status
+
+    def __repr__(self):
+        return "TeamID: {}, UserID: {}, status: {}".format(self.team_id, self.user_id, self.status)
+
+
+
+
+
+        

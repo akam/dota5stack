@@ -12,4 +12,4 @@ class Team(db.Model):
     def __init__(self, prefix, name, num_players):
         self.prefix = prefix
         self.name = name
-        self.num_players
+        self.num_players = num_players

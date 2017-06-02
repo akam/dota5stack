@@ -4,5 +4,20 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Teams page</h1>
+  <h1>All teams</h1>
+  {% for team in teams %}
+    <li><a href="{{ url_for('teams.show', id=team.id) }}">
+    {% if team.prefix %}
+      [{{team.prefix}}]
+    {% endif %}
+    - {{team.name}}
+    </a></li>
+
+  {% for player in team.userz %}
+    <img class="card-image" src="{{player.users.img_url}}" alt="">
+  {% endfor %}
+  
+  {% endfor %}
+
+
 {% endblock %}

@@ -6,6 +6,9 @@
 {% block content %}
   {% if current_user.is_authenticated %}
   <h1>Welcome back {{user.username}}!</h1>
+  
+  
+
   {% else %}
   <h1>Welcome to Dota 5 Stack</h1> 
   <h3>Please sign up or log in to start finding people to fill your party</h3>

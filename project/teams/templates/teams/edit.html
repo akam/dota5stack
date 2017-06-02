@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-4">
+    <h2 class="join-message">Edit Team.</h2>
+    <form action="{{ url_for('teams.show', id=team.id) }}?_method=PATCH" method="POST">
+      {{ form.csrf_token }}
+      <p>Team tags: <small>(optional)</small></p>
+      {% if form.prefix.errors %}
+        {% for error in form.prefix.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      {{ form.prefix(placeholder="What do you what your prefix to be?", value=team.prefix, class="form-control") }}
+
+      <p>Team name:</p>
+      {% if form.name.errors %}
+        {% for error in form.name.errors %}
+          <span class="text-danger">
+            {{ error }}
+          </span>
+        {% endfor %}
+      {% endif %}
+      {{ form.name(placeholder="What do you want your name to be?", value=team.name, class="form-control") }}
+      <br>
+      <button type="submit" class="btn btn-success">Edit this team!</button>
+      <a href="{{ url_for('teams.show', id=team.id) }}" class="btn btn-default">Cancel</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

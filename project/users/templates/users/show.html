@@ -14,6 +14,12 @@
           </form>
         {% endif %}
       {% endif %}
+      <br>
+      {% if current_user.is_authenticated and current_user.teamz[0].status == 3 %}
+        <form method="POST" action="{{url_for('teams.invite', id=current_user.teamz[0].team_id, user_id=user.id )}}">
+          <input type="submit" value="Invite to team" class="btn btn-warning">
+        </form>
+      {% endif %}
     </div>
     <div class="col-xs-3">
       <!-- IMAGE, USERNAME, STATUS -->

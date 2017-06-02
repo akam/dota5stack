@@ -1,0 +1,23 @@
+{% extends "base.html" %} 
+{% block title %}
+  Team Index
+{% endblock %}
+
+{% block content %}
+  <div class="pull-right">
+  {% if current_user.is_authenticated and current_user.id == team.num_players %}
+    <form method="GET" action="{{url_for('teams.edit', id=team.id)}}" >
+      <input type="submit" value="Edit team info  " class="btn btn-primary btn-md">
+    </form>
+  {% endif %}
+  </div>
+  <h1>
+  {% if team.prefix %}
+    [{{team.prefix}}]
+  {% endif %}
+  {{team.name}}</h1>
+  {% for user in users %}
+    <img class="card-image" src="{{user.img_url}}" alt="{{user.username}}">
+    <p>{{user.username}}</p>
+  {% endfor %}
+{% endblock %}
