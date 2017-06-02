@@ -16,7 +16,6 @@ teams_blueprint = Blueprint(
 def index():
     if request.method == "POST":
         form = TeamForm(request.form)
-        from IPython import embed; embed()
         new_team = Team(
             name = form.name.data,
             prefix = form.prefix.data,
@@ -68,6 +67,22 @@ def edit(id):
         return redirect(url_for('teams.index'))
     return render_template('teams/edit.html', form=TeamForm(request.form), team=Team.query.get(id))
 
+@teams_blueprint.route('/<int:id>/delete', methods=['DELETE'])
+def delete(id):
+    team = Team.query.get(id)
+    name = team.name
+    if team.num_players != current_user.id:
+        flash({'text': "Not Authorized", 'status': 'danger'})
+        return redirect(url_for('teams.index'))
+    teams_players = TeamUsers.query.filter_by(team_id=id).all()
+    for playerlink_row in teams_players:
+        db.session.delete(playerlink_row)
+    db.session.delete(team)
+    db.session.commit()
+    flash({'text': "You have deleted team {}".format(name), 'status': 'danger'})
+    return redirect(url_for('teams.index'))
+
+
 @teams_blueprint.route('/<int:id>/invite/<int:user_id>', methods=['POST'])
 def invite(id, user_id):
     team = Team.query.get(id)
@@ -85,4 +100,35 @@ def invite(id, user_id):
     db.session.commit()
     flash({ 'text': "Invite sent successfully!", 'status': 'success' })
     return redirect(url_for('teams.index'))
+
+@teams_blueprint.route('/<int:id>/remove/<int:user_id>', methods=['DELETE'])
+def remove(id, user_id):
+    team = Team.query.get(id)
+    if team.num_players != current_user.id:
+        flash({'text': "Not Authorized", 'status': 'danger'})
+        return redirect(url_for('teams.index'))
+    found_user = TeamUsers.query.get(user_id)
+    found_user = User.query.get(user_id)       
+    for matching_team in found_user.teamz:
+        if(matching_team.team_id == id):
+            db.session.delete(matching_team)
+    db.session.commit()
+    user = User.query.get(user_id)
+    flash({ 'text': "You have removed '{}' from team '{}'".format(user.username, team.name), 'status': 'danger' })
+    return redirect(url_for('teams.show', id=id))
+
+@teams_blueprint.route('/<int:id>/leave', methods=['DELETE'])
+def leave(id):
+    team = Team.query.get(id)
+    if team.num_players == current_user.id:
+        flash({'text': "Cannot leave as Team Captain! If you want to delete, you must delete the whole team", 'status': 'danger'})
+        return redirect(url_for('teams.index'))
+    db.session.delete(current_user.teamz[0])
+    db.session.commit()
+    flash({ 'text': "You have left team {}".format(team.name), 'status': 'danger' })
+    return redirect(url_for('teams.show', id=id))
+
+
+
+
 

@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-sm-4 col-sm-offset-4">
-    <h2 class="join-message">Edit Team.</h2>
+  <div class="col-sm-6">
+    <h2 class="heading-message">Edit Team.</h2>
     <form action="{{ url_for('teams.show', id=team.id) }}?_method=PATCH" method="POST">
       {{ form.csrf_token }}
       <p>Team tags: <small>(optional)</small></p>
@@ -31,6 +31,32 @@
       <a href="{{ url_for('teams.show', id=team.id) }}" class="btn btn-default">Cancel</a>
     </form>
   </div>
+  <div class="col-sm-6">
+    <h2 class="heading-message">Manage team members</h2>
+    {% for player in team.userz %}
+      {% if player.users.id != current_user.id %}
+        <div class="col-xs-6">
+          <br>
+          <img class="card-image" src="{{player.users.img_url}}" alt="">
+          <br>
+          <br>
+          <form method="POST" action="{{url_for('teams.remove', id=team.id, user_id=player.users.id)}}?_method=DELETE">
+            <input type="submit" value="Kick {{player.users.username}}" class="btn btn-warning btn-sm">
+          </form>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
 </div>
-
+<br>
+<br>
+<br>
+<br>
+<div class="pull-left">
+{% if current_user.is_authenticated and current_user.id == team.num_players %}
+  <form method="POST" action="{{url_for('teams.delete', id=team.id)}}?_method=DELETE" >
+    <input type="submit" value="DELETE TEAM". class="btn btn-danger btn-md">
+  </form>
+{% endif %}
+</div>
 {% endblock %}

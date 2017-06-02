@@ -19,5 +19,12 @@
   {% for user in users %}
     <img class="card-image" src="{{user.img_url}}" alt="{{user.username}}">
     <p>{{user.username}}</p>
+    {% if user == current_user %}
+      {% if current_user.id != team.num_players %}
+        <form  class='deletebox' method="POST" action="{{url_for('teams.leave', id=team.id)}}?_method=DELETE" >
+          <input type="submit" value="Leave Team" class="btn btn-danger btn-sm">
+        </form>
+      {% endif %}
+    {% endif %}
   {% endfor %}
 {% endblock %}

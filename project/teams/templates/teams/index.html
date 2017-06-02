@@ -4,6 +4,13 @@
 {% endblock %}
 
 {% block content %}
+  {% if current_user.teamz == [] %}
+
+    <a class="pull-right" href="{{ url_for('teams.new') }}">
+    <button class="btn btn-success">Create a team!</button>
+    </a>
+  {% endif %}
+
   <h1>All teams</h1>
   {% for team in teams %}
     <li><a href="{{ url_for('teams.show', id=team.id) }}">
