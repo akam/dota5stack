@@ -38,21 +38,29 @@ def index():
     players = p['response']['players']
     players.sort(key=lambda player: player['steamid'])
     l2p = []
+    ingame = []
     online = []
     away = []
     rest = []
-    for i,v in enumerate(players):
-        if players[i]['personastate'] == 1:
+    for i,player in enumerate(players):
+        if player.get('gameid',None) == '570':
+            ingame.append(users[i])
+        elif player['personastate'] == 1:
             online.append(users[i])
-        elif players[i]['personastate'] == 6: 
+        elif player['personastate'] == 6: 
             l2p.append(users[i])
-        elif players[i]['personastate'] == 3:
+        elif player['personastate'] == 3:
             away.append(users[i])
-        elif players[i]['personastate'] == 4:
+        elif player['personastate'] == 4:
             away.append(users[i])
         else:
             rest.append(users[i])
-    return render_template('users/index.html', users=users, online=online, rest=rest, away=away, l2p=l2p)
+    l2p.sort(key=lambda user: user.likers.count(), reverse=True)
+    ingame.sort(key=lambda user: user.likers.count(), reverse=True)
+    online.sort(key=lambda user: user.likers.count(), reverse=True)
+    away.sort(key=lambda user: user.likers.count(), reverse=True)
+    rest.sort(key=lambda user: user.likers.count(), reverse=True)
+    return render_template('users/index.html', users=users, online=online, rest=rest, away=away, l2p=l2p, ingame=ingame)
 
 @users_blueprint.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -179,6 +187,7 @@ def show(id):
     diff = today - last_online
     # .strftime('%d/%m/%Y')
     status = dataJSON['response']['players'][0]['personastate']
+
     if request.method == 'GET' or current_user.is_anonymous or current_user.get_id() != str(id):
         return render_template('users/show.html', user=found_user, data=dataJSON, diff=diff.days, last_online=last_online.strftime('%d/%m/%Y'), status=status)
 
@@ -198,7 +207,42 @@ def liker(liker_id):
 @users_blueprint.route('/<int:id>/liking', methods=['GET'])
 @login_required
 def liking(id):
-    return render_template('users/liking.html', user=User.query.get(id), current_user=current_user)
+    users = User.query.get(id)
+    liking = users.liking.all()
+    liking.sort(key=lambda user: user.steamID)
+    steamIDarray = [user.steamID for user in liking]
+    steamIDarray.sort()
+    steamIDs = ",".join([str(ids) for ids in steamIDarray])
+    payload = {'key': os.environ.get('API_KEY'), 'steamids': steamIDs}
+    r = requests.get('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/', params=payload)
+    p = r.json()
+    players = p['response']['players']
+    players.sort(key=lambda player: player['steamid'])
+    l2p = []
+    ingame = []
+    online = []
+    away = []
+    rest = []
+    for i,player in enumerate(players):
+        if player.get('gameid',None) == '570':
+            ingame.append(liking[i])
+        elif player['personastate'] == 1:
+            online.append(liking[i])
+        elif player['personastate'] == 6: 
+            l2p.append(liking[i])
+        elif player['personastate'] == 3:
+            away.append(liking[i])
+        elif player['personastate'] == 4:
+            away.append(liking[i])
+        else:
+            rest.append(liking[i])
+
+    l2p.sort(key=lambda user: user.likers.count(), reverse=True)
+    ingame.sort(key=lambda user: user.likers.count(), reverse=True)
+    online.sort(key=lambda user: user.likers.count(), reverse=True)
+    away.sort(key=lambda user: user.likers.count(), reverse=True)
+    rest.sort(key=lambda user: user.likers.count(), reverse=True)
+    return render_template('users/liking.html', user=User.query.get(id), current_user=current_user, online=online, rest=rest, away=away, l2p=l2p, ingame=ingame)
 
 @users_blueprint.route('/<int:id>/likers', methods=['GET'])
 @login_required

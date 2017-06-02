@@ -14,12 +14,12 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
 </head>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" id="navbar-static">
   <div class="container-fluid">
     <div class="navbar-header">
       <a href="{{ url_for('root') }}" class="navbar-brand">
         <!-- <img src="{{ url_for('static', filename='images/warbler-logo.png') }}" alt=""> -->
-        <span>Dota 5 Stack</span>
+        <span><img class="dota_logo" src="{{ url_for('static', filename='images/dota_2.png') }}" alt=""></span><span>Dota 5 Stack</span>
       </a>
     </div>
     {% if not current_user.is_anonymous %}
@@ -27,6 +27,10 @@
       <li><a href="{{ url_for('users.index') }}">All users</a></li>
       <li><a href="{{ url_for('users.liking', id=current_user.id) }}">Liked playing with</a></li>
       <li><a href="{{ url_for('teams.index') }}">All teams</a></li>
+      {% if current_user.teamz %}
+        <li><a href="{{ url_for('teams.show', id=current_user.teamz[0].team_id)}}">My team</a></li>
+      {% endif %}
+      <li><a href="https://discord.gg/CTF2uEP">Join our Discord</a></li>
     </ul>
     {% endif %}
     <ul class="nav navbar-nav navbar-right">
@@ -67,12 +71,13 @@
     </ul>
   </div>
 </nav>
-
+  {% for message in get_flashed_messages() %}
+    <div class="alert alert-{{ message['status'] }}">{{ message['text'] }}</div>
+  {% endfor %}
 <body>
+  <div class="parallax"></div>
   <div class="container">
-    {% for message in get_flashed_messages() %}
-      <div class="alert alert-{{ message['status'] }}">{{ message['text'] }}</div>
-    {% endfor %}
+
     {% block content %}
     {% endblock %}
     <script  
@@ -83,5 +88,11 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </div>
+  {% if c2 %}
+  <div class="container">
+    {% block content2 %}
+    {% endblock %}
+  </div>
+  {% endif %}
 </body>
 </html>

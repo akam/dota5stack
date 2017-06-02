@@ -126,12 +126,11 @@
           </span>
         {% endfor %}
       {% endif %}
-
-      <p>To confirm changes, enter your password:</p>
+      <label for="password">To confirm changes, enter your password:</label>
        {% if form.password.errors %}
         {% for error in form.password.errors %}
           <span class="text-danger">
-            Please enter your password to submit changes
+            <p>Please enter your password to submit changes<p>
           </span>
         {% endfor %}
       {% endif %}

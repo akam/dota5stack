@@ -46,6 +46,7 @@ class User(db.Model, UserMixin):
     offlane = db.Column(db.Boolean)
     mid = db.Column(db.Boolean)
     password = db.Column(db.Text)
+    # teams = db.relationship("Team", secondary="TeamUsers", backref=db.backref('users'), ondelete="cascade,all")
     likers = db.relationship("User",
                                 secondary=LikersLikee,
                                 primaryjoin=(LikersLikee.c.liker_id == id),
@@ -98,7 +99,7 @@ class TeamUsers(db.Model):
         self.status = status
 
     def __repr__(self):
-        return "TeamID: {}, UserID: {}, status: {}".format(self.team_id, self.user_id, self.status)
+        return "team_id: {}, user_id: {}, status: {}".format(self.team_id, self.user_id, self.status)
 
 
 

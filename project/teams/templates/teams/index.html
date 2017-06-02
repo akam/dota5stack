@@ -6,19 +6,19 @@
 {% block content %}
   {% if current_user.teamz == [] %}
 
-    <a class="pull-right" href="{{ url_for('teams.new') }}">
+    <a class="pull-right create_team" href="{{ url_for('teams.new') }}">
     <button class="btn btn-success">Create a team!</button>
     </a>
   {% endif %}
 
   <h1>All teams</h1>
   {% for team in teams %}
-    <li><a href="{{ url_for('teams.show', id=team.id) }}">
+    <li><h2><a href="{{ url_for('teams.show', id=team.id) }}">
     {% if team.prefix %}
       [{{team.prefix}}]
     {% endif %}
     - {{team.name}}
-    </a></li>
+    </a></h2></li>
 
   {% for player in team.userz %}
     <img class="card-image" src="{{player.users.img_url}}" alt="">

@@ -35,4 +35,4 @@ def root():
     if not current_user.is_anonymous:
         return render_template('home.html', user=current_user)
     else:
-        return render_template('home.html')
+        return render_template('home.html', users=User.query.all(), c2=True)

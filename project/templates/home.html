@@ -13,4 +13,12 @@
   <h1>Welcome to Dota 5 Stack</h1> 
   <h3>Please sign up or log in to start finding people to fill your party</h3>
   {% endif %}
+
+{% endblock %}
+
+{% block content2 %}
+  <br>
+{% for user in users %}
+  <img class="img_all_users" src="{{user.img_url}}">
+{% endfor %}
 {% endblock %}

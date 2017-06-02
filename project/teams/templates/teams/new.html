@@ -6,8 +6,7 @@
     <h2 class="create-message">Make a Team</h2>
     <form action="{{ url_for('teams.index') }}" method="POST">
       {{ form.csrf_token }}
-
-      <p>Prefix: <small>(optional)</small></p>
+      <label for="prefix">Prefix: <small>(optional)</small></label>
       {% if form.prefix.errors %}
         {% for error in form.prefix.errors %}
           <span class="text-danger">
@@ -16,8 +15,7 @@
         {% endfor %}
       {% endif %}
       {{ form.prefix(placeholder="Team tag", class="form-control") }}
-
-      <p>Team name:</p>
+      <label for="name">Team name:</label>
       {% if form.name.errors %}
         {% for error in form.name.errors %}
           <span class="text-danger">

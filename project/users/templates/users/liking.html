@@ -10,12 +10,6 @@
           @{{ user.username[0:15]}}...
         {% endif %}
       </h4>
-      {% if user.bio %}
-        <p>About Me: </p>
-        <p>{{user.bio}}</p>
-      {% endif %}
-      <p>E-mail: {{user.email}}</p>
-      
       {% if user.location %}
         <p>Location: 
         {{user.location}}</p>
@@ -23,55 +17,343 @@
       
     </div>
     <div class="col-xs-9">
-      <div class="row">
-        {% for likee in user.liking %}
+        <div class="row">
+        {% if user == current_user %}
+          <h1>You liked playing with:</h1>
+        {% else %}
+          <h1>'{{user.username}}' liked playing with:</h1>
+        {% endif %}
+        
+
+        <h2>Currently On Dota:</h2>
+        {% for user in l2p %}
           <div class="col-xs-4">
             <div class="card">
               <div class="box prof pull-left">
-                <a href="{{ url_for('users.show', id=likee.id) }}" class="card-link">
-                  <img src="{{ likee.img_url }}" alt="Image for {{ likee.username }}" class="card-image">
-                  <p>
-                  {% if likee.username|length <= 8 %}
-                    @{{ likee.username }}
+                <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+                  <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+                  {% if user.username|length <= 8 %}
+                    @{{ user.username }}
                     {% else %}
-                    @{{ likee.username[0:8]}}...
+                    @{{ user.username[0:8]}}...
                   {% endif %}
-                  </p>
                 </a>
                </div>   
               <div class="box info">
-                <p>Karma score: 10</p>
-                <p>MMR: {{likee.mmr}}</p>
+                <p>MMR: {{user.mmr}}</p>
                 <p>Pos: 
-                {% if likee.support2 and likee.support1 and likee.offlane and likee.carry and likee.mid %}
+                {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
                   Any
                 {% else %}
-                  {% if likee.support2 %}
+                  {% if user.support2 %}
                   [5]
                   {% endif %}
-                  {% if likee.support1 %}
+                  {% if user.support1 %}
                   [4]
                   {% endif %}
-                  {% if likee.offlane %}
+                  {% if user.offlane %}
                   [3]
                   {% endif %}
-                  {% if likee.mid%}
+                  {% if user.mid%}
                   [2]
                   {% endif %}
-                  {% if likee.carry %}
+                  {% if user.carry %}
                   [1]
                   {% endif %}
                 {% endif %}
                 </p>
               </div> 
             </div>
-            {% if likee == current_user %}
-            {% elif current_user.is_liking(likee) %}
-              <form method="POST" action="{{url_for('users.liker', liker_id=likee.id)}}?_method=DELETE">
+            {% if user == current_user %}
+            {% elif current_user.is_liking(user) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
                 <input type="submit" value="Unlike" class="btn btn-info btn-sm">
               </form>
             {% else %}
-              <form method="POST" action="{{url_for('users.liker', liker_id=likee.id)}}">
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+                <input type="submit" value="Like" class="btn btn-primary btn-sm">
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+        {% for user in ingame %}
+          <div class="col-xs-4">
+            <div class="card">
+              <div class="box prof pull-left">
+                <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+                  <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+                  <p>
+                  {% if user.username|length <= 8 %}
+                    @{{ user.username }}
+                    {% else %}
+                    @{{ user.username[0:8]}}...
+                  {% endif %}
+                  </p>
+                </a>
+               </div>   
+              <div class="box info">
+                <p>MMR: {{user.mmr}}</p>
+                <p>Pos: 
+                {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+                  Any
+                {% else %}
+                  {% if user.support2 %}
+                  [5]
+                  {% endif %}
+                  {% if user.support1 %}
+                  [4]
+                  {% endif %}
+                  {% if user.offlane %}
+                  [3]
+                  {% endif %}
+                  {% if user.mid%}
+                  [2]
+                  {% endif %}
+                  {% if user.carry %}
+                  [1]
+                  {% endif %}
+                {% endif %}
+                </p>
+                <p><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+              </div> 
+            </div>
+            {% if user == current_user %}
+            {% elif current_user.is_liking(user) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+                <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+              </form>
+            {% else %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+                <input type="submit" value="Like" class="btn btn-primary btn-sm">
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+
+
+
+      <div class="row">
+        <h2>Online:</h2>
+        {% for user in l2p %}
+          <div class="col-xs-4">
+            <div class="card">
+              <div class="box prof pull-left">
+                <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+                  <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+                  <p>
+                  {% if user.username|length <= 8 %}
+                    @{{ user.username }}
+                    {% else %}
+                    @{{ user.username[0:8]}}...
+                  {% endif %}
+                  </p>
+                </a>
+               </div>   
+              <div class="box info">
+                <p>MMR: {{user.mmr}}</p>
+                <p>Pos: 
+                {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+                  Any
+                {% else %}
+                  {% if user.support2 %}
+                  [5]
+                  {% endif %}
+                  {% if user.support1 %}
+                  [4]
+                  {% endif %}
+                  {% if user.offlane %}
+                  [3]
+                  {% endif %}
+                  {% if user.mid%}
+                  [2]
+                  {% endif %}
+                  {% if user.carry %}
+                  [1]
+                  {% endif %}
+                {% endif %}
+                </p>
+                <p><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+              </div> 
+            </div>
+            {% if user == current_user %}
+            {% elif current_user.is_liking(user) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+                <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+              </form>
+            {% else %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+                <input type="submit" value="Like" class="btn btn-primary btn-sm">
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+        {% for user in online %}
+          <div class="col-xs-4">
+            <div class="card">
+              <div class="box prof pull-left">
+                <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+                  <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+                  <p>
+                  {% if user.username|length <= 8 %}
+                    @{{ user.username }}
+                    {% else %}
+                    @{{ user.username[0:8]}}...
+                  {% endif %}
+                  </p>
+                </a>
+               </div>   
+              <div class="box info">
+                <p>MMR: {{user.mmr}}</p>
+                <p>Pos: 
+                {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+                  Any
+                {% else %}
+                  {% if user.support2 %}
+                  [5]
+                  {% endif %}
+                  {% if user.support1 %}
+                  [4]
+                  {% endif %}
+                  {% if user.offlane %}
+                  [3]
+                  {% endif %}
+                  {% if user.mid%}
+                  [2]
+                  {% endif %}
+                  {% if user.carry %}
+                  [1]
+                  {% endif %}
+                {% endif %}
+                </p>
+                <p><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+              </div> 
+            </div>
+            {% if user == current_user %}
+            {% elif current_user.is_liking(user) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+                <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+              </form>
+            {% else %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+                <input type="submit" value="Like" class="btn btn-primary btn-sm">
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+
+      <div class="row">
+        <h2>Away or Snooze:</h2>
+        {% for user in away %}
+          <div class="col-xs-4">
+            <div class="card">
+              <div class="box prof pull-left">
+                <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+                  <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+                  <p>
+                  {% if user.username|length <= 8 %}
+                    @{{ user.username }}
+                    {% else %}
+                    @{{ user.username[0:8]}}...
+                  {% endif %}
+                  </p>
+                </a>
+               </div>   
+              <div class="box info">
+                <p>MMR: {{user.mmr}}</p>
+                <p>Pos: 
+                {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+                  Any
+                {% else %}
+                  {% if user.support2 %}
+                  [5]
+                  {% endif %}
+                  {% if user.support1 %}
+                  [4]
+                  {% endif %}
+                  {% if user.offlane %}
+                  [3]
+                  {% endif %}
+                  {% if user.mid%}
+                  [2]
+                  {% endif %}
+                  {% if user.carry %}
+                  [1]
+                  {% endif %}
+                {% endif %}
+                </p>
+                <p><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+              </div> 
+            </div>
+            {% if user == current_user %}
+            {% elif current_user.is_liking(user) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+                <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+              </form>
+            {% else %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+                <input type="submit" value="Like" class="btn btn-primary btn-sm">
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+
+
+      <div class="row">
+        <h2>Offline, Busy or Private Profile:</h2>
+        {% for user in rest %}
+          <div class="col-xs-4">
+            <div class="card">
+              <div class="box prof pull-left">
+                <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+                  <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+                  <p>
+                  {% if user.username|length <= 8 %}
+                    @{{ user.username }}
+                    {% else %}
+                    @{{ user.username[0:8]}}...
+                  {% endif %}
+                  </p>
+                </a>
+               </div>   
+              <div class="box info">
+                <p>MMR: {{user.mmr}}</p>
+                <p>Pos: 
+                {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+                  Any
+                {% else %}
+                  {% if user.support2 %}
+                  [5]
+                  {% endif %}
+                  {% if user.support1 %}
+                  [4]
+                  {% endif %}
+                  {% if user.offlane %}
+                  [3]
+                  {% endif %}
+                  {% if user.mid%}
+                  [2]
+                  {% endif %}
+                  {% if user.carry %}
+                  [1]
+                  {% endif %}
+                {% endif %}
+                </p>
+                <p><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+              </div> 
+            </div>
+            {% if user == current_user %}
+            {% elif current_user.is_liking(user) %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+                <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+              </form>
+            {% else %}
+              <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
                 <input type="submit" value="Like" class="btn btn-primary btn-sm">
               </form>
             {% endif %}

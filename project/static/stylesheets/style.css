@@ -11,23 +11,23 @@
 }
 
 .grey{
-  box-shadow: 0 0 0 4px #ccc;
+  box-shadow: 0 0 30px 0 #ccc;
 }
 
 .purple{
-  box-shadow: 0 0 0 4px #d88dd8;
+  box-shadow: 0 0 30px 0 #d88dd8;
 }
 
 .red{
-  box-shadow: 0 0 0 4px #e66666;
+  box-shadow: 0 0 30px 0 #e66666;
 }
 
 .orange{
-  box-shadow: 0 0 0 4px #ffc574;
+  box-shadow: 0 0 40px 3px #ff9500;
 }
 
 .green{
-  box-shadow: 0 0 0 4px #74ce5f;
+  box-shadow: 0 0 30px 0 #74ce5f;
 }
 
 .hamburger{
@@ -45,7 +45,7 @@
   border: 1px solid #CCC;
   background: white;
   margin-top: 20px;
-  box-shadow: 7px 7px 14px -3px #ccc;
+  box-shadow: 7px 5px 12px 0px black;
 }
 
 .card-image {
@@ -80,5 +80,87 @@
   top: 25%;
 }
 
+.dota_logo{
+  width: 27px;
+}
 
+.container{
+  background-color:rgba(0, 0, 0, 0.6);
+  padding-left: 35px;
+  padding-bottom: 23px;
+  margin-bottom: 13px;
+  border-radius: 5px;
+/*  background-image: url("../images/background.jpg");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 90px;
+  background-color: none;*/
+}
 
+.parallax {
+  /* The image used */
+  background-image: url("../images/background.jpg");
+
+  /* Set a specific height */
+  min-height: 200px; 
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body{
+  background-image: url("../images/background.jpg");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 90px;
+}
+
+h1,h2,h3,h4{
+  color:white;
+}
+.alert{
+  z-index: 1;
+  position: fixed;
+  left: 0;
+  top: 54px;
+  width: 100%;
+}
+
+#navbar-static{
+  z-index: 2;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+label{
+  color:white;
+}
+
+.side-profile p,.side-profile li{
+  color:white;
+}
+
+.img_all_users{
+  width: 96px;
+}
+
+.like{
+  margin-top: 20px;
+  margin-right: 30px;
+}
+
+.inline{
+  display: inline;
+}
+
+.create_team{
+  margin-top: 20px;
+  margin-right: 30px;
+}

@@ -1,12 +1,13 @@
 {% extends "base.html" %} 
 {% block title %}
-  Dota buddy finder
+  All registered users
 {% endblock %}
 
 {% block content %}
-  <div class="row">
+    <div class="row">
     <h1>All users</h1>
-    <h2>Currently Online:</h2>
+
+    <h2>Currently On Dota:</h2>
     {% for user in l2p %}
       <div class="col-xs-3">
         <div class="card">
@@ -23,7 +24,110 @@
             </a>
            </div>   
           <div class="box info">
-            <p>Karma score: 10</p>
+            <p class='pull-right'><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+            <p>MMR: {{user.mmr}}</p>
+            <p>Pos: 
+            {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+              Any
+            {% else %}
+              {% if user.support2 %}
+              [5]
+              {% endif %}
+              {% if user.support1 %}
+              [4]
+              {% endif %}
+              {% if user.offlane %}
+              [3]
+              {% endif %}
+              {% if user.mid%}
+              [2]
+              {% endif %}
+              {% if user.carry %}
+              [1]
+              {% endif %}
+            {% endif %}
+            </p>
+          </div> 
+        </div>
+        {% if user == current_user %}
+        {% elif current_user.is_liking(user) %}
+          <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}?_method=DELETE">
+            <input type="submit" value="Unlike" class="btn btn-info btn-sm">
+          </form>
+        {% else %}
+          <form method="POST" action="{{url_for('users.liker', liker_id=user.id)}}">
+            <input type="submit" value="Like" class="btn btn-primary btn-sm">
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% for user in ingame %}
+      <div class="col-xs-3">
+        <div class="card">
+          <div class="box prof pull-left">
+            <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+              <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+              <p>
+              {% if user.username|length <= 8 %}
+                @{{ user.username }}
+                {% else %}
+                @{{ user.username[0:8]}}...
+              {% endif %}
+              </p>
+            </a>
+           </div>   
+          <div class="box info">
+            <p class='pull-right'><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
+            <p>MMR: {{user.mmr}}</p>
+            <p>Pos: 
+            {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
+              Any
+            {% else %}
+              {% if user.support2 %}
+              [5]
+              {% endif %}
+              {% if user.support1 %}
+              [4]
+              {% endif %}
+              {% if user.offlane %}
+              [3]
+              {% endif %}
+              {% if user.mid%}
+              [2]
+              {% endif %}
+              {% if user.carry %}
+              [1]
+              {% endif %}
+            {% endif %}
+            </p>
+          </div> 
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+
+
+  <div class="row">
+    <h2>Online:</h2>
+    {% for user in l2p %}
+      <div class="col-xs-3">
+        <div class="card">
+          <div class="box prof pull-left">
+            <a href="{{ url_for('users.show', id=user.id) }}" class="card-link">
+              <img src="{{ user.img_url }}" alt="Image for {{ user.username }}" class="card-image">
+              <p>
+              {% if user.username|length <= 8 %}
+                @{{ user.username }}
+                {% else %}
+                @{{ user.username[0:8]}}...
+              {% endif %}
+              </p>
+            </a>
+           </div>   
+          <div class="box info">
+            <p class='pull-right'><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
             <p>MMR: {{user.mmr}}</p>
             <p>Pos: 
             {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
@@ -76,7 +180,7 @@
             </a>
            </div>   
           <div class="box info">
-            <p>Karma score: 10</p>
+            <p class='pull-right'><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
             <p>MMR: {{user.mmr}}</p>
             <p>Pos: 
             {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
@@ -107,7 +211,7 @@
 
 
   <div class="row">
-    <h2>Currently Away or Snooze</h2>
+    <h2>Away or Snooze:</h2>
     {% for user in away %}
       <div class="col-xs-3">
         <div class="card">
@@ -124,7 +228,7 @@
             </a>
            </div>   
           <div class="box info">
-            <p>Karma score: 10</p>
+            <p class='pull-right'><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
             <p>MMR: {{user.mmr}}</p>
             <p>Pos: 
             {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
@@ -153,7 +257,7 @@
     {% endfor %}
   </div>
   <div class="row">
-    <h2>Currently Offline, Busy or Private Profile</h2>
+    <h2>Offline, Busy or Private Profile:</h2>
     {% for user in rest %}
       <div class="col-xs-3">
         <div class="card">
@@ -170,7 +274,7 @@
             </a>
            </div>   
           <div class="box info">
-            <p>Karma score: 10</p>
+            <p class='pull-right'><a href="http://steamcommunity.com/profiles/{{user.steamID}}" target="_blank">Steam Profile</a></p>
             <p>MMR: {{user.mmr}}</p>
             <p>Pos: 
             {% if user.support2 and user.support1 and user.offlane and user.carry and user.mid %}
@@ -198,6 +302,4 @@
       </div>
     {% endfor %}
   </div>
-  <br>
-  <br>
 {% endblock %}
