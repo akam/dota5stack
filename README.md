@@ -1,7 +1,9 @@
 # Dota 5 Stack
 
 ## About
-Personally, I hate playing with pub randoms. Yes, you will find a fun person to play with occasionally - but the anonymity usually brings out the worst in people. I want to help build the community. In my case, the Australian community of all skill levels. 
+Personally, I hate playing with pub randoms. Yes, you will find a fun person to play with occasionally - but the anonymity usually brings out the worst in people. 
+
+I want to help build the community. In my case, the Australian community of all skill levels. 
 
 
 ## Set up
@@ -49,8 +51,9 @@ Libraries:
 
 ## To do:
 
-
+- Fix steam profile button
 - Implimiment buttons to use AJAX and jQuery
+- filter all by MMR & Position
 - Plan and style information of offline and online lists
 - Profile page to include a small bio of the user
 - Pending and accepting team invites (currently captain invites people to teams) 
@@ -58,3 +61,6 @@ Libraries:
 		- 1 - Pending
 		- 2 - Joined
 		- 3 - Captain
+
+- Extra: 
+  - Outsource to polavan: to fix borders && filter by mutual likes

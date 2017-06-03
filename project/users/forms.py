@@ -17,7 +17,7 @@ class UserForm(FlaskForm):
 class EditForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired(), Email()])
-    steamID = StringField('steamID', validators=[DataRequired()])
+    # steamID = StringField('steamID', validators=[DataRequired()])
     carry = BooleanField('carry', validators=[Optional()])
     support1 = BooleanField('support1', validators=[Optional()])
     support2 = BooleanField('support2', validators=[Optional()])

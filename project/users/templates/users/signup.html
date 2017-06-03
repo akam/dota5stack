@@ -34,24 +34,25 @@
       {% endif %}
       <label for="steamID">Steam ID:</label>
       {{ form.steamID(placeholder="SteamID", class="form-control") }}
-      <label for="position">Preferred position(s):</label>
+      <label for="position">Preferred position(s): </label>
+      <label for=""><small>(Please uncheck non-preferred positions)</small></label>
       <div>
         <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox1" name='support2' value="option1"> Support (Position 5)
+          <input type="checkbox" id="inlineCheckbox1" name='support2' value="option1" checked> Support (Position 5)
         </label>
         <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox2" name='support1' value="option2"> Support (Position 4)
+          <input type="checkbox" id="inlineCheckbox2" name='support1' value="option2" checked> Support (Position 4)
         </label>
         <div>
         <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" name='offlane' value="option3"> Offlane (Position 3)
+          <input type="checkbox" id="inlineCheckbox3" name='offlane' value="option3" checked> Offlane (Position 3)
         </label>
         <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox4" name='mid' value="option4"> Mid (Position 2)
+          <input type="checkbox" id="inlineCheckbox4" name='mid' value="option4" checked> Mid (Position 2)
         </label>
         </div>
         <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox5" name='carry' value="option5"> Carry (Position 1)
+          <input type="checkbox" id="inlineCheckbox5" name='carry' value="option5" checked> Carry (Position 1)
         </label>
       </div>
 
@@ -65,7 +66,7 @@
       <label for="mmr">MMR:</label>
         <select name="mmr" class="form-control" id='mmr'>
           <option>1000</option>
-          <option>2000</option>
+          <option selected>2000</option>
           <option>3000</option>
           <option>4000</option>
           <option>5000+</option>

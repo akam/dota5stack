@@ -165,7 +165,6 @@ def show(id):
             if bcrypt.check_password_hash(found_user.password, form.password.data):
                 found_user.username = form.username.data;
                 found_user.email = form.email.data;
-                found_user.steamID = form.steamID.data;
                 found_user.support2 = form.support2.data;
                 found_user.support1 = form.support1.data;
                 found_user.carry = form.carry.data;
